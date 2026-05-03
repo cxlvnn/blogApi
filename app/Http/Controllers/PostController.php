@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -13,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Auth::user()->posts()->paginate(5);
 
         return PostResource::collection($posts);
     }
@@ -23,7 +24,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post_data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'max:1000'],
+        ]);
+
+        $post = Auth::user()->posts()->create($post_data);
+
+        return new PostResource($post);
     }
 
     /**
@@ -31,7 +39,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return new PostResource($post);
     }
 
     /**
@@ -39,7 +47,14 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $update_post_data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'max:1000'],
+        ]);
+
+        $post->update($update_post_data);
+
+        return new PostResource($post);
     }
 
     /**
@@ -47,6 +62,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->deleteOrFail();
+        return response()->noContent();
     }
 }

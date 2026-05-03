@@ -12,13 +12,14 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/posts', [PostController::class, 'show']);
+    Route::get('/posts/{post}', [PostController::class, 'show']);
     Route::post('/posts', [PostController::class, 'store']);
-    Route::patch('/posts', [PostController::class, 'update']);
-    Route::delete('/posts', [PostController::class, 'destroy']);
+    Route::patch('/posts/{post}', [PostController::class, 'update']);
+    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::delete('/users', [AuthController::class, 'deleteUser']);
+
 });
 
 Route::middleware('guest')->group(function () {
