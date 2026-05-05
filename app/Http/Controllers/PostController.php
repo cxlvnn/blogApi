@@ -6,6 +6,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -14,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Auth::user()->posts()->paginate(5);
+        $posts = Auth::user()->posts()->with('comments')->get();
 
         return PostResource::collection($posts);
     }
@@ -39,6 +40,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        Gate::authorize('viewOrModify', $post);
+
         return new PostResource($post);
     }
 
@@ -47,6 +50,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        Gate::authorize('viewOrModify', $post);
         $update_post_data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'max:1000'],
@@ -62,7 +66,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        Gate::authorize('viewOrModify', $post);
         $post->deleteOrFail();
+
         return response()->noContent();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,16 +10,26 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('throttle:api')->group(function () {
 
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::get('/posts/{post}', [PostController::class, 'show']);
-    Route::post('/posts', [PostController::class, 'store']);
-    Route::patch('/posts/{post}', [PostController::class, 'update']);
-    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+    Route::middleware('auth:sanctum')->group(function () {
 
-    Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::delete('/users', [AuthController::class, 'deleteUser']);
+        Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+        Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+        Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+        Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+        Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+        Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('comments.index');
+        Route::get('/posts/{post}/comments/{comment}', [CommentController::class, 'show'])->name('comments.show');
+        Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+        Route::patch('/posts/{post}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+        Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+        Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::delete('/users', [AuthController::class, 'deleteUser']);
+
+    });
 
 });
 

@@ -16,10 +16,19 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'type' => 'post',
             'id' => $this->id,
             'title' => $this->title,
-            'body' => $this->body,
-            'author' => new UserResource(User::findOrFail($this->user_id)),
+            'body' => $this->when(
+                ! $request->routeIs('posts.index'),
+                $this->body
+            ),
+            'createdAt' => $this->created_at->diffForHumans(),
+            'updatedAt' => $this->updated_at->diffForHumans(),
+            'relationships' => [
+                'author' => new UserResource(User::findOrFail($this->user_id)),
+                'comments' => CommentResource::collection($this->comments),
+            ],
         ];
     }
 }
