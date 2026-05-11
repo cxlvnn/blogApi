@@ -8,15 +8,16 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Post $post)
     {
-        $comments = Auth::user()->comments()->paginate(7);
+        $comments = $post->comments()->paginate();
 
         return CommentResource::collection($comments);
     }
@@ -45,16 +46,22 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCommentRequest $request, Comment $comment)
+    public function update(UpdateCommentRequest $request, Post $post, Comment $comment)
     {
-        //
+        Gate::authorize('updateOrDelete', $comment);
+        $comment->update($request->validated());
+
+        return new CommentResource($comment);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
-        //
+        Gate::authorize('updateOrDelete', $comment);
+        $comment->delete();
+
+        return response()->noContent();
     }
 }

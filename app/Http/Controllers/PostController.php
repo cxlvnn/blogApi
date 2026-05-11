@@ -40,7 +40,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        Gate::authorize('viewOrModify', $post);
+        Gate::authorize('view', $post);
 
         return new PostResource($post);
     }
@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        Gate::authorize('viewOrModify', $post);
+        Gate::authorize('updateOrDelete', $post);
         $update_post_data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'max:1000'],
@@ -66,7 +66,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        Gate::authorize('viewOrModify', $post);
+        Gate::authorize('updateOrDelete', $post);
         $post->deleteOrFail();
 
         return response()->noContent();

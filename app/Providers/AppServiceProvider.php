@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
+use App\Models\Post;
+use App\Policies\CommentPolicy;
+use App\Policies\PostPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,5 +36,8 @@ class AppServiceProvider extends ServiceProvider
                     ], 429);
                 });
         });
+
+        Gate::policy(Comment::class, CommentPolicy::class);
+        Gate::policy(Post::class, PostPolicy::class);
     }
 }

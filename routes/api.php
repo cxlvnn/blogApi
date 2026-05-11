@@ -21,7 +21,9 @@ Route::middleware('throttle:api')->group(function () {
         Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 
         Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('comments.index');
-        Route::get('/posts/{post}/comments/{comment}', [CommentController::class, 'show'])->name('comments.show');
+        Route::get('/posts/{post}/comments/{comment}', [CommentController::class, 'show'])->name('comments.show')->missing(function () {
+            return response()->json(['message' => 'Not Found'], 404);
+        });
         Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
         Route::patch('/posts/{post}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
         Route::delete('/posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');

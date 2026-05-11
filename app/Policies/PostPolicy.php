@@ -8,8 +8,18 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
-    public function viewOrModify(User $user, Post $post): Response
+    public function viewAny(): Response
     {
-        return $user->id === $post->user->id ? Response::allow() : Response::denyAsNotFound();
+        return Response::allow();
+    }
+
+    public function view(): Response
+    {
+        return Response::allow();
+    }
+
+    public function updateOrDelete(User $user, Post $post): Response
+    {
+        return $user->id === $post->user_id ? Response::allow() : Response::denyAsNotFound();
     }
 }
