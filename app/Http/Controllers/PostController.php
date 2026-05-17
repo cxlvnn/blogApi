@@ -15,7 +15,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Auth::user()->posts()->with('comments', 'likes')->paginate();
+        /** @var User $user */
+        $user = Auth::user();
+        $posts = $user->posts()->with('comments', 'likes')->paginate();
 
         return PostResource::collection($posts);
     }
@@ -30,7 +32,10 @@ class PostController extends Controller
             'body' => ['required', 'max:1000'],
         ]);
 
-        $post = Auth::user()->posts()->create($post_data);
+        /** @var User $user */
+        $user = Auth::user();
+
+        $post = $user->posts()->create($post_data);
 
         return new PostResource($post);
     }
