@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Auth::user()->posts()->with('comments')->paginate();
+        $posts = Auth::user()->posts()->with('comments', 'likes')->paginate();
 
         return PostResource::collection($posts);
     }

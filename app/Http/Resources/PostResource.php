@@ -23,6 +23,7 @@ class PostResource extends JsonResource
                 ! $request->routeIs('posts.index'),
                 $this->body
             ),
+            'likeCount' => count($this->likes),
             'createdAt' => $this->created_at->diffForHumans(),
             'updatedAt' => $this->updated_at->diffForHumans(),
             'relationships' => [
