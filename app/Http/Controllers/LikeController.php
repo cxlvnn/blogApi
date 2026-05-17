@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\LikeResource;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,13 +19,25 @@ class LikeController extends Controller
         ]);
     }
 
-    public function like(Post $post)
+    public function likeOrUnlike(Post $post)
     {
-        $like = Auth::user()->likes()->create([
-            'post_id' => $post->id,
-        ]);
+        $like = $post->likes()->where('user_id', Auth::user()->id)->first();
 
-        return 'hello';
-        /* return new LikeResource($like); */
+        if (! $like) {
+            Like::create([
+                'post_id' => $post->id,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            return response()->json([
+                'liked' => true,
+            ]);
+        }
+
+        $like->delete();
+
+        return response()->json([
+            'liked' => false,
+        ], 200);
     }
 }

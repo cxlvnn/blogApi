@@ -31,8 +31,7 @@ Route::middleware('throttle:api')->group(function () {
 
         // like
         Route::get('/posts/{post}/likes', [LikeController::class, 'index']);
-        Route::post('/posts/{post}/like', [LikeController::class, 'like']);
-        Route::delete('/posts/{post}/like', [LikeController::class, 'dislike']);
+        Route::post('/posts/{post}/like', [LikeController::class, 'likeOrUnlike']);
 
         // user logout and delete
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
