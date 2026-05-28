@@ -16,8 +16,9 @@ class PostController extends Controller
     public function index()
     {
         /** @var User $user */
-        $user = Auth::user();
-        $posts = $user->posts()->with('comments', 'likes')->paginate();
+        /* $user = Auth::user(); */
+        /* $posts = $user->posts()->with('comments', 'likes')->paginate(); */
+        $posts = Post::with('comments', 'likes')->paginate();
 
         return PostResource::collection($posts);
     }
@@ -43,9 +44,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Request $request, Post $post)
     {
         Gate::authorize('view', $post);
+$user = $request->user();
+        $user->read_count++;
+$user->save();
+
 
         return new PostResource($post);
     }

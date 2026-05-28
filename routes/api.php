@@ -7,10 +7,6 @@ use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 Route::middleware('throttle:api')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -33,9 +29,11 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/posts/{post}/likes', [LikeController::class, 'index']);
         Route::post('/posts/{post}/like', [LikeController::class, 'likeOrUnlike']);
 
-        // user logout and delete
+        // user relalted
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/users', [AuthController::class, 'deleteUser']);
+        Route::get('/me', [AuthController::class, 'me'])->name('me');
+        Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 
     });
 

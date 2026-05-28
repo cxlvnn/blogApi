@@ -19,13 +19,14 @@ class PostResource extends JsonResource
             'type' => 'post',
             'id' => $this->id,
             'title' => $this->title,
-            'body' => $this->when(
-                ! $request->routeIs('posts.index'),
-                $this->body
-            ),
+            /* 'body' => $this->when( */
+            /*     ! $request->routeIs('posts.index'), */
+            /*     $this->body */
+            /* ), */
+            'body' => $this->body,
             'likeCount' => count($this->likes),
-            'createdAt' => $this->created_at->diffForHumans(),
-            'updatedAt' => $this->updated_at->diffForHumans(),
+            'createdAt' => $this->created_at->format('M d, Y'),
+            'updatedAt' => $this->updated_at->format('M d, Y'),
             'relationships' => [
                 'author' => new UserResource(User::findOrFail($this->user_id)),
                 'comments' => CommentResource::collection($this->comments),

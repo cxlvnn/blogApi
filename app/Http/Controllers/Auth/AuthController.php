@@ -5,39 +5,63 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
+use App\Http\Resources\MeResource;
+use App\Http\Resources\ProfileResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     public function register(RegisterUserRequest $request)
     {
         $user = User::create($request->validated());
-        $token = $user->createToken('register-api-token')->plainTextToken;
 
         return response()->json([
-            'user' => $user->name,
-            'email' => $user->email,
-            'token' => $token,
+            'user' => $user,
         ], 201);
     }
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => [trans('auth.failed')],
-            ]);
+        if (! Auth::attempt($request->validated())) {
+            return response()->json(['message' => 'Invalid credentials']);
         }
-        $token = $user->createToken('login-api-token')->plainTextToken;
+        $request->session()->regenerate();
 
         return response()->json([
-            'message' => 'Login successful!',
-            'token' => $token,
+            'user' => Auth::user(),
         ]);
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+
+        return new MeResource($user);
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        $user->postCount = count($user->posts);
+        if (count($user->posts) === 0) {
+            $user->postCount = 0;
+
+            return new ProfileResource($user);
+        }
+
+        return new ProfileResource($user);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Logged out.']);
     }
 
     public function deleteUser(Request $request)
@@ -51,6 +75,7 @@ class AuthController extends Controller
 
         $user->tokens()->delete();
         $user->deleteOrFail();
+
         return response()->json(['message' => 'User deleted successfully!'], 204);
     }
 }
