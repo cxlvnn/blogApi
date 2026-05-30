@@ -18,7 +18,7 @@ class PostController extends Controller
         /** @var User $user */
         /* $user = Auth::user(); */
         /* $posts = $user->posts()->with('comments', 'likes')->paginate(); */
-        $posts = Post::with('comments', 'likes')->paginate();
+        $posts = Post::with('comments', 'likes')->latest()->paginate();
 
         return PostResource::collection($posts);
     }
@@ -47,10 +47,9 @@ class PostController extends Controller
     public function show(Request $request, Post $post)
     {
         Gate::authorize('view', $post);
-$user = $request->user();
+        $user = $request->user();
         $user->read_count++;
-$user->save();
-
+        $user->save();
 
         return new PostResource($post);
     }

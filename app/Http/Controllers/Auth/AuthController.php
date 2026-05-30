@@ -17,16 +17,19 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request)
     {
         $user = User::create($request->validated());
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
 
         return response()->json([
             'user' => $user,
+            'message' => 'Registration successful',
         ], 201);
     }
 
     public function login(LoginRequest $request)
     {
         if (! Auth::attempt($request->validated())) {
-            return response()->json(['message' => 'Invalid credentials']);
+            return response()->json(['message' => 'Invalid credentials'], 422);
         }
         $request->session()->regenerate();
 
