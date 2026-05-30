@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MeResource extends JsonResource
+class AuthorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +18,12 @@ class MeResource extends JsonResource
         return [
             'name' => $this->name,
             'email' => $this->email,
-            'joinedAt' => $this->created_at->format('Y'),
-            'type' => $this->type,
+            'postCount' => Post::where('user_id', $this->id)->count(),
             'readCount' => $this->read_count,
-            'streak' => $this->streak,
+            'bio' => $this->bio,
+            'address' => $this->address,
+            'website' => $this->website,
+            'joinedAt' => $this->created_at->format('Y'),
         ];
     }
 }

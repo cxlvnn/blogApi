@@ -16,8 +16,6 @@ class UserResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'email' => $this->when($request->routeIs('me'), $this->email),
-            'joinedAt' => $this->when($request->routeIs('me'), $this->created_at->format('Y')),
         ];
     }
 }

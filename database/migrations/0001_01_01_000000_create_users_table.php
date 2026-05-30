@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('type')->default('MEMBER');
             $table->string('bio')->nullable();
             $table->string('address')->default('Not set');
+            $table->string('website')->default('Not set');
+            $table->integer('streak')->default(0);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
