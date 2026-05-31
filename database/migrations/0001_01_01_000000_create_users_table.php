@@ -20,7 +20,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->integer('read_count')->default(0);
             $table->string('type')->default('MEMBER');
             $table->string('bio')->nullable();
             $table->string('address')->default('Not set');

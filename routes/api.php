@@ -33,8 +33,11 @@ Route::middleware('throttle:api')->group(function () {
         Route::post('/posts/{post}/like', [LikeController::class, 'likeOrUnlike']);
 
         // user related
+        Route::get('/user', function () {
+            return response()->json(['message' => 'Authenticated.', 200]);
+        });
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
-        Route::delete('/users', [AuthController::class, 'deleteUser']);
+        Route::delete('/user', [AuthController::class, 'deleteUser']);
         Route::get('/me', [AuthController::class, 'me'])->name('me');
         Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 

@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Like::class);
     }
+
+    public function reads(): HasMany
+    {
+        return $this->hasMany(Read::class);
+    }
 }

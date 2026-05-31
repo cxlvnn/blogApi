@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Read;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class MeResource extends JsonResource
             'email' => $this->email,
             'joinedAt' => $this->created_at->format('Y'),
             'type' => $this->type,
-            'readCount' => $this->read_count,
+            'readCount' => Read::where('user_id', $this->id)->count(),
             'streak' => $this->streak,
         ];
     }

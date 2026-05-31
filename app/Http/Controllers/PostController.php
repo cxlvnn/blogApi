@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\Read;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -47,9 +48,14 @@ class PostController extends Controller
     public function show(Request $request, Post $post)
     {
         Gate::authorize('view', $post);
+
         $user = $request->user();
-        $user->read_count++;
-        $user->save();
+        if (! Read::where('user_id', $user->id)->where('post_id', $post->id)->exists()) {
+            Read::create([
+                'post_id' => $post->id,
+                'user_id' => $user->id,
+            ]);
+        }
 
         return new PostResource($post);
     }

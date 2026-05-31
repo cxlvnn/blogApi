@@ -27,4 +27,9 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function reads(): HasMany
+    {
+        return $this->hasMany(Read::class);
+    }
 }

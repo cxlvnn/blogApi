@@ -27,7 +27,7 @@ class PostResource extends JsonResource
             /* ), */
             'body' => $this->body,
             'likeCount' => count($this->likes),
-            'userLiked' => Like::where('user_id', Auth::user()->id)->exists() ? 'true' : 'false',
+            'userLiked' => Like::where('user_id', Auth::user()->id)->where('post_id', $this->id)->exists() ? 'true' : 'false',
             'createdAt' => $this->created_at->format('M d, Y'),
             'updatedAt' => $this->updated_at->format('M d, Y'),
             'relationships' => [
