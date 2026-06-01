@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -20,6 +21,7 @@ Route::middleware('throttle:api')->group(function () {
         Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
         Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
         Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+        Route::post('/posts/{post}/bookmark', [BookmarkController::class, 'saveOrUnsave']);
 
         // comments
         Route::get('/posts/{post}/comments', [CommentController::class, 'index'])->name('comments.index');
@@ -32,14 +34,17 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/posts/{post}/likes', [LikeController::class, 'index']);
         Route::post('/posts/{post}/like', [LikeController::class, 'likeOrUnlike']);
 
+        // bookmarks
+        Route::get('/me/bookmarks', [BookmarkController::class, 'indexForThree']);
+
         // user related
         Route::get('/user', function () {
             return response()->json(['message' => 'Authenticated.', 200]);
         });
+
+        Route::get('/me', [AuthController::class, 'me'])->name('me');
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/user', [AuthController::class, 'deleteUser']);
-        Route::get('/me', [AuthController::class, 'me'])->name('me');
-        Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 
     });
 

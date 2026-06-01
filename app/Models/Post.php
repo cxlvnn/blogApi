@@ -32,4 +32,9 @@ class Post extends Model
     {
         return $this->hasMany(Read::class);
     }
+
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(Bookmark::class);
+    }
 }

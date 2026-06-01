@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Bookmark;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class PostResource extends JsonResource
             'body' => $this->body,
             'likeCount' => count($this->likes),
             'userLiked' => Like::where('user_id', Auth::user()->id)->where('post_id', $this->id)->exists() ? 'true' : 'false',
+            'userSaved' => Bookmark::where('user_id', Auth::user()->id)->where('post_id', $this->id)->exists() ? true : false,
             'createdAt' => $this->created_at->format('M d, Y'),
             'updatedAt' => $this->updated_at->format('M d, Y'),
             'relationships' => [
