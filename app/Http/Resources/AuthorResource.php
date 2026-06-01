@@ -19,7 +19,7 @@ class AuthorResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'postCount' => Post::where('user_id', $this->id)->count(),
-            'readCount' => $this->read_count,
+            'readCount' => $this->reads()->count(),
             'bio' => $this->bio,
             'address' => $this->address,
             'website' => $this->website,

@@ -18,6 +18,7 @@ class MeResource extends JsonResource
         return [
             'name' => $this->name,
             'email' => $this->email,
+            'bio' => $this->bio,
             'joinedAt' => $this->created_at->format('Y'),
             'type' => $this->type,
             'readCount' => Read::where('user_id', $this->id)->count(),
@@ -25,6 +26,7 @@ class MeResource extends JsonResource
             'streak' => $this->streak,
             'relationships' => [
                 'bookmarks' => BookmarkResource::collection($this->bookmarks),
+                'readingHistory' => ReadResource::collection($this->reads()->latest()->take(3)->get()),
             ],
         ];
     }

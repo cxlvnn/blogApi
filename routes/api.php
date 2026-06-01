@@ -6,6 +6,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('throttle:api')->group(function () {
@@ -39,9 +40,9 @@ Route::middleware('throttle:api')->group(function () {
 
         // user related
         Route::get('/user', function () {
-            return response()->json(['message' => 'Authenticated.', 200]);
+            return response()->json(['message' => 'Authenticated.'], 200);
         });
-
+        Route::post('/user', [UserController::class, 'update']);
         Route::get('/me', [AuthController::class, 'me'])->name('me');
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/user', [AuthController::class, 'deleteUser']);
@@ -50,7 +51,7 @@ Route::middleware('throttle:api')->group(function () {
 
 });
 
-Route::middleware('guest')->group(function () {
+Route::middleware('web', 'guest')->group(function () {
 
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');

@@ -66,6 +66,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         Gate::authorize('updateOrDelete', $post);
+
         $update_post_data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'max:1000'],

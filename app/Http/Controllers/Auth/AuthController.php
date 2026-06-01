@@ -69,14 +69,14 @@ class AuthController extends Controller
 
     public function deleteUser(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
-        if (! $user || Hash::check($request->password, $user->password)) {
+        $user = Auth::user();
+        if (! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'There is no user with these credentials in our database',
-            ]);
+                'password' => $request->password,
+            ], 422);
         }
 
-        $user->tokens()->delete();
         $user->deleteOrFail();
 
         return response()->json(['message' => 'User deleted successfully!'], 204);
