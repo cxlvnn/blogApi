@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Resources\MeResource;
 use App\Http\Resources\ProfileResource;
 use App\Models\User;
@@ -80,5 +81,15 @@ class AuthController extends Controller
         $user->deleteOrFail();
 
         return response()->json(['message' => 'User deleted successfully!'], 204);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $user = Auth::user();
+        $user->update($request->validated());
+
+        return response()->json([
+            'message' => 'Password updated successfully.',
+        ], 200);
     }
 }

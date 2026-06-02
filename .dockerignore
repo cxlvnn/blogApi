@@ -1,0 +1,58 @@
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Git
+.git
+.gitattributes
+.gitignore
+
+# IDEs / Editors
+/.idea
+/.vscode
+/.zed
+/.nova
+/.cursor/
+/.phpunit.cache
+/.phpactor.json
+
+# Dependencies
+/vendor
+/node_modules
+
+# Build / Generated files
+/public/build
+/public/hot
+/public/storage
+
+# Laravel specific
+storage/*.key
+storage/pail
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/logs/*
+
+# Ignore local SQLite db, but keep folder structure
+/database/*.sqlite
+/database/*.sqlite-journal
+
+# Environment files
+.env
+.env.backup
+.env.production
+
+# Certificates / Keys
+*.key
+*.pem
+
+# Logs
+*.log
+npm-debug.log
+yarn-error.log
+
+# OS files
+.DS_Store
+Thumbs.db

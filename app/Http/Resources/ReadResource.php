@@ -17,8 +17,8 @@ class ReadResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'postId' => Post::where('id', $this->id)->value('id'),
-            'postTitle' => Post::where('id', $this->id)->value('title'),
+            'postId' => Post::where('id', $this->post_id)->value('id'),
+            'postTitle' => Post::where('id', $this->post_id)->value('title'),
             'readAt' => $this->created_at->diffForHumans(),
         ];
     }

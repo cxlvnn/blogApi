@@ -46,7 +46,7 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/me', [AuthController::class, 'me'])->name('me');
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/user', [AuthController::class, 'deleteUser']);
-
+        Route::put('/user/password', [AuthController::class, 'changePassword']);
     });
 
 });
