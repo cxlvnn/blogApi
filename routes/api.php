@@ -42,7 +42,7 @@ Route::middleware('throttle:api')->group(function () {
         Route::get('/user', function () {
             return response()->json(['message' => 'Authenticated.'], 200);
         });
-        Route::post('/user', [UserController::class, 'update']);
+        Route::put('/user', [UserController::class, 'update']);
         Route::get('/me', [AuthController::class, 'me'])->name('me');
         Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::delete('/user', [AuthController::class, 'deleteUser']);
