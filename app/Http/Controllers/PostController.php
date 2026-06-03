@@ -49,8 +49,9 @@ class PostController extends Controller
     {
         Gate::authorize('view', $post);
 
+        /** @var User $user */
         $user = $request->user();
-        if (! Read::where('user_id', $user->id)->where('post_id', $post->id)->exists()) {
+        if ($post->user->id !== $user->id && ! Read::where('user_id', $user->id)->where('post_id', $post->id)->exists()) {
             Read::create([
                 'post_id' => $post->id,
                 'user_id' => $user->id,

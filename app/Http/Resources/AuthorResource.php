@@ -24,6 +24,8 @@ class AuthorResource extends JsonResource
             'address' => $this->address,
             'website' => $this->website,
             'joinedAt' => $this->created_at->format('Y'),
+            'links' => $this->links,
+            'recentPosts' => RecentPostResource::collection($this->posts()->latest()->take(3)->get()),
         ];
     }
 }

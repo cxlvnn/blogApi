@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('type')->default('MEMBER');
+            $table->json('links')->default('[]');
             $table->string('bio')->nullable();
             $table->string('address')->default('Not set');
             $table->string('website')->default('Not set');
