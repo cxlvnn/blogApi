@@ -21,7 +21,8 @@ class CommentResource extends JsonResource
                 $request->routeIs('comments.show') || $request->routeIs('comments.index'),
                 $this->post->title,
             ),
-            'text' => $this->content,
+            'body' => $this->comment,
+            'postedAt' => $this->created_at->diffForHumans(),
             'relationships' => [
                 'authorName' => $this->user->name,
             ],

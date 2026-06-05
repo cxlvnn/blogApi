@@ -19,7 +19,7 @@ class PostController extends Controller
         /** @var User $user */
         /* $user = Auth::user(); */
         /* $posts = $user->posts()->with('comments', 'likes')->paginate(); */
-        $posts = Post::with('comments', 'likes')->latest()->paginate();
+        $posts = Post::with('comments', 'likes')->latest()->paginate(7);
 
         return PostResource::collection($posts);
     }
